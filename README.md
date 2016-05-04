@@ -12,6 +12,6 @@ On popup use top five widgets starting with the widgets that have icons (those a
   custom widgets based on the code here in this repository (see live preview as you click options and change text fields)
 
 TODO:
-Still need to add admin forms for customizing the defaults
-Still working Qualtrics and Slate form embed templates
-Facebook feed code needs to be structured more like twitter feed and twitter follow button template code
+Still need to add admin forms for customizing the defaults.
+Still working Qualtrics and Slate form embed templates.
+Facebook feed code needs to be structured more like twitter feed and twitter follow button template code.
