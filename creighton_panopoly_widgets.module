@@ -1,0 +1,174 @@
+<?php
+/**
+ * @file
+ * Code for the Fieldable Panels Pane widgets:
+ * Twitter follow, Twitter feed, Facebook feed, Qualtrics (BlueQ) embed, and Slate Embed
+ */
+
+/**
+ * Implements hook_permission().
+ */
+function creighton_panopoly_widgets_permission() {
+  return array(
+      'administer creighton panapoly widgets module' => array(
+          'title' => t('Administer Creighton Widgets Module'),
+          'description' => t('Perform administration tasks the Creighton Panapoly Widgets Module.'),
+      ),
+  );
+}
+
+/**
+ * Implementation of hook_entity_info_alter()
+ */
+function creighton_panopoly_widgets_entity_info_alter(&$entity_info) {
+
+  // Facebook Feed
+  $entity_info['fieldable_panels_pane']['bundles']['fpp_facebook_feed'] = array(
+    'label' => t('Facebook Page Feed'),
+    'description' => t('Add a facebook page feed.'),
+    'pane category' => t('Custom'),
+    'pane top level' => TRUE,
+    'pane icon' => drupal_get_path('module', 'creighton_panopoly_widgets') . '/images/icon/icon-facebook.png',
+    'admin' => array(
+      'path' => 'admin/structure/fieldable-panels-panes/manage/%fieldable_panels_panes_type',
+      'bundle argument' => 4,
+      'real path' => 'admin/structure/fieldable-panels-panes/manage/fpp-facebook-feed',
+      'access arguments' => array('administer fieldable panels panes'),
+    ),
+  );
+
+  // Twitter Follow Button
+  $entity_info['fieldable_panels_pane']['bundles']['fpp_twitter_follow'] = array(
+    'label' => t('Twitter Follow Button'),
+    'description' => t('Add a twitter Follow Button with options.'),
+    'pane category' => t('Custom'),
+    'pane top level' => TRUE,
+    'pane icon' => drupal_get_path('module', 'creighton_panopoly_widgets') . '/images/icon/icon-follow.png',
+    'admin' => array(
+      'path' => 'admin/structure/fieldable-panels-panes/manage/%fieldable_panels_panes_type',
+      'bundle argument' => 4,
+      'real path' => 'admin/structure/fieldable-panels-panes/manage/fpp-twitter-follow',
+      'access arguments' => array('administer fieldable panels panes'),
+    ),
+  );
+
+  // Twitter Feed
+  $entity_info['fieldable_panels_pane']['bundles']['fpp_twitter_feed'] = array(
+    'label' => t('Twitter Feed'),
+    'description' => t('Add a twitter feed.'),
+    'pane category' => t('Custom'),
+    'pane top level' => TRUE,
+    'pane icon' => drupal_get_path('module', 'creighton_panopoly_widgets') . '/images/icon/icon-twitter.png',
+    'admin' => array(
+      'path' => 'admin/structure/fieldable-panels-panes/manage/%fieldable_panels_panes_type',
+      'bundle argument' => 4,
+      'real path' => 'admin/structure/fieldable-panels-panes/manage/fpp-twitter-feed',
+      'access arguments' => array('administer fieldable panels panes'),
+    ),
+  );
+
+  // Slate embed
+  $entity_info['fieldable_panels_pane']['bundles']['fpp_slate_form'] = array(
+    'label' => t('Slate Form'),
+    'description' => t('Add a Slate web form.'),
+    'pane category' => t('Custom'),
+    'pane top level' => TRUE,
+    'pane icon' => drupal_get_path('module', 'creighton_panopoly_widgets') . '/images/icon/icon-slate.png',
+    'admin' => array(
+      'path' => 'admin/structure/fieldable-panels-panes/manage/%fieldable_panels_panes_type',
+      'bundle argument' => 4,
+      'real path' => 'admin/structure/fieldable-panels-panes/manage/fpp-slate-form',
+      'access arguments' => array('administer fieldable panels panes'),
+    ),
+  );
+
+  // Qualtrics embed
+  $entity_info['fieldable_panels_pane']['bundles']['fpp_qualtrics_form'] = array(
+    'label' => t('Qualtrics Form'),
+    'description' => t('Add a Qualtrics web form.'),
+    'pane category' => t('Custom'),
+    'pane top level' => TRUE,
+    'pane icon' => drupal_get_path('module', 'creighton_panopoly_widgets') . '/images/icon/icon-qualtrics.png',
+    'admin' => array(
+      'path' => 'admin/structure/fieldable-panels-panes/manage/%fieldable_panels_panes_type',
+      'bundle argument' => 4,
+      'real path' => 'admin/structure/fieldable-panels-panes/manage/fpp-qualtrics-form',
+      'access arguments' => array('administer fieldable panels panes'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_theme_registry_alter().
+ */
+function creighton_panopoly_widgets_theme_registry_alter(&$theme_registry) {
+  // Defined path to the current module.
+  $module_path = drupal_get_path('module', 'creighton_panopoly_widgets');
+  // Find all .tpl.php files in this module's folder recursively.
+  $template_file_objects = drupal_find_theme_templates($theme_registry, '.tpl.php', $module_path);
+  // Iterate through all found template file objects.
+  foreach ($template_file_objects as $key => $template_file_object) {
+    // If the template has not already been overridden by a theme.
+    if (!isset($theme_registry[$key]['theme path']) || !preg_match('#/themes/#', $theme_registry[$key]['theme path'])) {
+        // Alter the theme path and template elements.
+        $theme_registry[$key]['theme path'] = $module_path;
+        $theme_registry[$key] = array_merge($theme_registry[$key], $template_file_object);
+        $theme_registry[$key]['type'] = 'module';
+    }
+  }
+}
+
+/**
+ * Implements hook_theme().
+ */
+function creighton_panopoly_widgets_theme($existing, $type, $theme, $path) {
+  $theme = array();
+  $theme['fieldable_panels_pane__fpp_facebook_feed'] = array(
+    'render element' => 'content',
+    'base hook' => 'fieldable-panels-pane',
+    'template' => 'fieldable-panels-pane--fpp-facebook-feed',
+    'path' => drupal_get_path('module', 'creighton_panopoly_widgets') . '/templates',
+   );
+
+  $theme['fieldable_panels_pane__fpp_twitter_follow'] = array(
+    'render element' => 'content',
+    'base hook' => 'fieldable-panels-pane',
+    'template' => 'fieldable-panels-pane--fpp-twitter-follow',
+    'path' => drupal_get_path('module', 'creighton_panopoly_widgets') . '/templates',
+  );
+
+  $theme['fieldable_panels_pane__fpp_twitter_feed'] = array(
+    'render element' => 'content',
+    'base hook' => 'fieldable-panels-pane',
+    'template' => 'fieldable-panels-pane--fpp-twitter-feed',
+    'path' => drupal_get_path('module', 'creighton_panopoly_widgets') . '/templates',
+  );
+
+  $theme['fieldable_panels_pane__fpp_slate_form'] = array(
+    'render element' => 'content',
+    'base hook' => 'fieldable-panels-pane',
+    'template' => 'fieldable-panels-pane--fpp-slate-form',
+    'path' => drupal_get_path('module', 'creighton_panopoly_widgets') . '/templates',
+  );
+
+  $theme['fieldable_panels_pane__fpp_qualtrics_form'] = array(
+    'render element' => 'content',
+    'base hook' => 'fieldable-panels-pane',
+    'template' => 'fieldable-panels-pane--fpp-qualtrics-form',
+    'path' => drupal_get_path('module', 'creighton_panopoly_widgets') . '/templates',
+  );
+
+  return $theme;
+}
+
+/**
+ * Implements hook_page_build
+ */
+function creighton_panopoly_widgets_page_build(&$page) {
+  drupal_add_js('https://platform.twitter.com/widgets.js', array(
+    'type' => 'external',
+    'group' => JS_THEME,
+  ));
+
+  drupal_add_js(drupal_get_path('module', 'creighton_panopoly_widgets') . '/creighton-panopoly-widgets.js', array('scope' => 'footer'));
+}
