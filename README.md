@@ -10,3 +10,7 @@ Customize this page button (at bottom)
 Click the + button on the sidebar
 On popup use top five widgets starting with the widgets that have icons (those are my 
   custom widgets based on the code here in this repository (see live preview as you click options and change text fields)
+
+TODO:
+Still need to add forms for customizing the defaults
+Still working Qualtrics and Slate form embed templates
